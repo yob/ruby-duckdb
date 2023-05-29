@@ -9,6 +9,17 @@
 
 ruby-duckdb is Ruby binding for [DuckDB](http://www.duckdb.org) database engine
 
+## Fork Install
+
+This fork can compile duckdb on demand, avoiding the need to download duckdb directly. It works, but it's slow - be warned!
+
+Add it to your Gemfile like this:
+
+    git_source(:github) { |r| "https://github.com/#{r}.git" }
+    gem "duckdb", github: "yob/ruby-duckdb"
+
+Then bundle, and follow the instructions below for trying it out in your ruby program.
+
 ## Requirement
 
 You must have [DuckDB](http://www.duckdb.org) engine installed in order to build/use this module.
