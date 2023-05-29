@@ -11,7 +11,13 @@ require "rake/extensiontask"
 
 task :build => :compile
 
-Rake::ExtensionTask.new("duckdb_native") do |ext|
+GEMSPEC = Gem::Specification.load("duckdb.gemspec")
+
+# add your default gem packing task
+Gem::PackageTask.new(GEMSPEC) do |pkg|
+end
+
+Rake::ExtensionTask.new("duckdb_native", GEMSPEC) do |ext|
   ext.ext_dir = 'ext/duckdb'
   ext.lib_dir = "lib/duckdb"
 end

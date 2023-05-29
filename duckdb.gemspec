@@ -24,6 +24,12 @@ Gem::Specification.new do |spec|
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
+  # Add upstream duckdb lib
+  spec.files += ["ports/x86_64-linux-gnu/duckdb/0.8.0/lib/libduckdb.so"]
+
+  # Add native gem extension
+  spec.files += ["lib/duckdb/duckdb_native.so"]
+
   spec.require_paths = ['lib']
   spec.extensions    = ['ext/duckdb/extconf.rb']
   spec.required_ruby_version = '>= 2.7.0'
