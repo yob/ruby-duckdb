@@ -1,4 +1,7 @@
+gem "mini_portile2", "~> 2.8.2"
+
 require 'mkmf'
+require "mini_portile2"
 
 def duckdb_library_available?(func)
   header = find_header('duckdb.h') || find_header('duckdb.h', '/opt/homebrew/include')
@@ -18,7 +21,24 @@ def check_duckdb_library(func, version)
   raise msg
 end
 
-dir_config('duckdb')
+package_root_dir = File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+
+port_path = nil
+MiniPortileCMake.new("duckdb", "0.8.0").tap do |recipe|
+  recipe.files = [{
+    url: "https://github.com/duckdb/duckdb/archive/refs/tags/v0.8.0.tar.gz",
+    sha256: "df3b8e0b72bce38914f0fb1cd02235d8b616df9209beb14beb06bfbcaaf2e97f",
+  }]
+
+  recipe.target = File.join(package_root_dir, "ports")
+  unless File.exist?(File.join(recipe.target, recipe.host, recipe.name, recipe.version))
+    recipe.cook
+  end
+  recipe.activate
+  #pkg_config(File.join(recipe.path, "lib", "pkgconfig", "yaml-0.1.pc"))
+  port_path = recipe.path
+end
+dir_config('duckdb', File.join(port_path, "include"), File.join(port_path, "lib"))
 
 check_duckdb_library('duckdb_pending_prepared', '0.5.0')
 
